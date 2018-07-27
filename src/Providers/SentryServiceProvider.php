@@ -1,13 +1,12 @@
 <?php
 namespace IceAgency\Lumberjack\Providers;
 
-use ReflectionClass;
 use Rareloop\Lumberjack\Providers\ServiceProvider;
-use Rareloop\Lumberjack\Config;
+use Rareloop\Lumberjack\Facades\Config;
 
 class SentryServiceProvider extends ServiceProvider
 {
-    public function boot(Config $config)
+    public function boot()
     {
         if (!Config::get('sentry.dsn') || Config::get('sentry.enabled') == 'false') {
             return;
