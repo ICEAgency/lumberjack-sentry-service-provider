@@ -35,6 +35,14 @@ return [
 ```
 SENTRY_DSN=https://public:secret@sentry.example.com/1
 ```
+4. Add the Service Provider to the Providers array in `config/app.php` as follows:
+```
+'providers' => [
+    ...
+    IceAgency\Lumberjack\Providers\SentryServiceProvider::class,
+    ...
+],
+```
 
 ## Usage
 
