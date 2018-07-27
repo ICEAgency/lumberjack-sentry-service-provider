@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IceAgency\\SentryServiceProvider\\": "src"
+            "IceAgency\\Lumberjack\\Providers\\SentryServiceProvider\\": "src"
         }
     }
 }
