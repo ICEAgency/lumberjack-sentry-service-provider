@@ -10,5 +10,6 @@ class SentryServiceProvider extends ServiceProvider
     public function boot(Config $config)
     {
         dd($config);
+
     }
 }
