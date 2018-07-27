@@ -1,0 +1,23 @@
+{
+    "name": "iceagency/lumberjack-sentry-service-provider",
+    "type": "project",
+    "license": "MIT",
+    "description": "A Service Provider for the Lumberjack framework that adds a Sentry integration.",
+    "homepage": "https://github.com/ICEAgency/lumberjack-sentry-service-provider",
+    "authors": [
+        {
+            "name": "Luke Hopkins",
+            "email": "luke@theiceagency.co.uk",
+            "homepage": "https://github.com/iceagency-lukehopkins"
+        }
+    ],
+    "require": {
+        "rareloop/lumberjack-core": "^3.2.0",
+        "sentry/sentry": "^1.9.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "IceAgency\\SentryServiceProvider\\": "src"
+        }
+    }
+}
