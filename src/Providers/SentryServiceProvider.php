@@ -3,6 +3,8 @@ namespace IceAgency\Lumberjack\Providers;
 
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 use Rareloop\Lumberjack\Facades\Config;
+use Raven_Client;
+use Raven_ErrorHandler;
 
 class SentryServiceProvider extends ServiceProvider
 {
