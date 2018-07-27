@@ -26,12 +26,20 @@ Please note, this repo is not ready for production.
 ```
 <?php
 return [
-    'dsn' => getenv('SENTRY_DSN')
+    'enabled' => getenv('SENTRY_ENABLED')
+    'dsn' => getenv('SENTRY_DSN'),
 ];
 ```
 3. Add your Sentry DSN to your .env
+
 ```
-...
 SENTRY_DSN=https://public:secret@sentry.example.com/1
-...
+```
+
+## Usage
+
+By default, Sentry will automatically be sent exceptions, to disable Sentry for a specific environment, add this following to your .env
+
+```
+SENTRY_ENABLED=false
 ```
