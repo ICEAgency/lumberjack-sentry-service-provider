@@ -23,12 +23,14 @@ Please note, this repo is not ready for production.
 
 1. Create a config file called `config/sentry.php`
 2. Add the following:
-```<?php
+```
+<?php
 return [
     'sentry' => [
         'dsn' => getenv('SENTRY_DSN')
     ]
-];```
+];
+```
 3. Add your Sentry DSN to your .env
 ```
 ...
