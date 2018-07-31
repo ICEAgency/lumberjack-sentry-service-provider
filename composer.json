@@ -2,6 +2,7 @@
     "name": "iceagency/lumberjack-sentry-service-provider",
     "type": "project",
     "license": "MIT",
+    "version": "1.0.9",
     "description": "A Service Provider for the Lumberjack framework that adds a Sentry integration.",
     "homepage": "https://github.com/ICEAgency/lumberjack-sentry-service-provider",
     "authors": [
