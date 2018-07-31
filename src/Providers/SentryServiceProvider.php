@@ -11,28 +11,25 @@ class SentryServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->bind('raven_client', Raven_Client::class);
-        $this->app->bind('raven_error_handler', Raven_ErrorHandler::class);
-    }
+        $config = $this->app->get(Config::class);
 
-    public function boot(Config $config)
-    {
         if (!$config->get('sentry.dsn') || $config->get('sentry.enabled') == 'false') {
             return;
         }
 
-        $client = new Raven_Client($config->get('sentry.dsn'), [
+        $this->app->bind(Raven_Client::class, new Raven_Client($config->get('sentry.dsn'), [
             'environment' => $config->get('app.environment')
-        ]);
+        ]));
 
-        $this->app->bind('raven_client', $client);
+        $this->app->bind(Raven_ErrorHandler::class, new Raven_ErrorHandler($this->app->get(Raven_Client::class)));
+    }
 
-        $error_handler = new Raven_ErrorHandler($client);
-
-        $this->app->bind('raven_error_handler', $error_handler);
-
-        $error_handler->registerExceptionHandler();
-        $error_handler->registerErrorHandler();
-        $error_handler->registerShutdownFunction();
+    public function boot()
+    {
+        $raven_error_handler = $this->app->get(Raven_ErrorHandler::class);
+        $raven_error_handler->registerExceptionHandler();
+        $raven_error_handler->registerErrorHandler();
+        $raven_error_handler->registerShutdownFunction();
+        return true;
     }
 }

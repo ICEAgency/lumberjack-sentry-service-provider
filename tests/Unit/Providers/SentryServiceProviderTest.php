@@ -23,30 +23,29 @@ class SentryServiceProviderTest extends TestCase
         $this->app = new Application;
         $this->app->bind(Config::class, $this->config);
         $this->provider = new SentryServiceProvider($this->app);
-        $this->provider->register();
     }
 
-    public function testNoBootWhenNoDsnInConfig()
+    public function testNoRegisterWhenNoDsnInConfig()
     {
         $this->initProvider();
-        $this->assertNull($this->provider->boot($this->config));
+        $this->assertNull($this->provider->register());
     }
 
-    public function testNoBootWhenSentryDisabledInConfigWithNoDsn()
+    public function testNoRegisterWhenSentryDisabledInConfigWithNoDsn()
     {
         $this->initProvider();
         $this->config->set('sentry.enabled', "false");
 
-        $this->assertNull($this->provider->boot($this->config));
+        $this->assertNull($this->provider->register());
     }
 
-    public function testNoBootWhenSentryDisabledInConfigWithDsn()
+    public function testNoRegisterWhenSentryDisabledInConfigWithDsn()
     {
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
         $this->config->set('sentry.enabled', "false");
 
-        $this->assertNull($this->provider->boot($this->config));
+        $this->assertNull($this->provider->register());
     }
 
     public function testSentryClientIsCreated()
@@ -54,9 +53,9 @@ class SentryServiceProviderTest extends TestCase
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
 
-        $this->provider->boot($this->config);
+        $this->provider->register();
 
-        $this->assertInstanceOf(Raven_Client::class, $this->app->get('raven_client'));
+        $this->assertInstanceOf(Raven_Client::class, $this->app->get(Raven_Client::class));
     }
 
     public function testSentryErrorHandlerIsCreated()
@@ -64,19 +63,9 @@ class SentryServiceProviderTest extends TestCase
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
 
-        $this->provider->boot($this->config);
+        $this->provider->register();
 
-        $this->assertInstanceOf(Raven_ErrorHandler::class, $this->app->get('raven_error_handler'));
-    }
-
-    public function testEnvironmentEmptyWhenNotInConfig()
-    {
-        $this->initProvider();
-        $this->config->set('sentry.dsn', $this->exampleDsn);
-
-        $this->provider->boot($this->config);
-
-        $this->assertNull($this->app->get('raven_client')->environment);
+        $this->assertInstanceOf(Raven_ErrorHandler::class, $this->app->get(Raven_ErrorHandler::class));
     }
 
     public function testEnvironmentSetWhenInConfig()
@@ -85,8 +74,26 @@ class SentryServiceProviderTest extends TestCase
         $this->config->set('sentry.dsn', $this->exampleDsn);
         $this->config->set('app.environment', 'production');
 
-        $this->provider->boot($this->config);
+        $this->provider->register();
 
-        $this->assertEquals($this->app->get('raven_client')->environment, 'production');
+        $this->assertEquals($this->app->get(Raven_Client::class)->environment, 'production');
+    }
+
+    public function testEnvironmentEmptyWhenNotInConfig()
+    {
+        $this->initProvider();
+        $this->config->set('sentry.dsn', $this->exampleDsn);
+
+        $this->provider->register();
+
+        $this->assertNull($this->app->get(Raven_Client::class)->environment);
+    }
+
+    public function testBootCompletesRegisteringRavenHandlersAndFunctions()
+    {
+        $this->initProvider();
+        $this->config->set('sentry.dsn', $this->exampleDsn);
+        $this->provider->register();
+        $this->assertTrue($this->provider->boot());
     }
 }
