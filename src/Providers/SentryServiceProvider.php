@@ -3,13 +3,17 @@ namespace IceAgency\Lumberjack\Providers;
 
 use Rareloop\Lumberjack\Providers\ServiceProvider;
 use Rareloop\Lumberjack\Config;
+use Rareloop\Lumberjack\Application;
 use Raven_Client;
 use Raven_ErrorHandler;
 
 class SentryServiceProvider extends ServiceProvider
 {
-    private $sentry_client;
-    private $sentry_error_handler;
+    public function register()
+    {
+        $this->app->bind('raven_client', Raven_Client::class);
+        $this->app->bind('raven_error_handler', Raven_ErrorHandler::class);
+    }
 
     public function boot(Config $config)
     {
@@ -17,23 +21,18 @@ class SentryServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->sentry_client = new Raven_Client($config->get('sentry.dsn'), [
+        $client = new Raven_Client($config->get('sentry.dsn'), [
             'environment' => $config->get('app.environment')
         ]);
 
-        $this->sentry_error_handler = new Raven_ErrorHandler($this->sentry_client);
-        $this->sentry_error_handler->registerExceptionHandler();
-        $this->sentry_error_handler->registerErrorHandler();
-        $this->sentry_error_handler->registerShutdownFunction();
-    }
+        $this->app->bind('raven_client', $client);
 
-    public function getSentryClient() : Raven_Client
-    {
-        return $this->sentry_client;
-    }
+        $error_handler = new Raven_ErrorHandler($client);
 
-    public function getSentryErrorHandler() : Raven_ErrorHandler
-    {
-        return $this->sentry_error_handler;
+        $this->app->bind('raven_error_handler', $error_handler);
+
+        $error_handler->registerExceptionHandler();
+        $error_handler->registerErrorHandler();
+        $error_handler->registerShutdownFunction();
     }
 }

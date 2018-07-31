@@ -23,6 +23,7 @@ class SentryServiceProviderTest extends TestCase
         $this->app = new Application;
         $this->app->bind(Config::class, $this->config);
         $this->provider = new SentryServiceProvider($this->app);
+        $this->provider->register();
     }
 
     public function testNoBootWhenNoDsnInConfig()
@@ -55,7 +56,7 @@ class SentryServiceProviderTest extends TestCase
 
         $this->provider->boot($this->config);
 
-        $this->assertInstanceOf(Raven_Client::class, $this->provider->getSentryClient());
+        $this->assertInstanceOf(Raven_Client::class, $this->app->get('raven_client'));
     }
 
     public function testSentryErrorHandlerIsCreated()
@@ -65,7 +66,7 @@ class SentryServiceProviderTest extends TestCase
 
         $this->provider->boot($this->config);
 
-        $this->assertInstanceOf(Raven_ErrorHandler::class, $this->provider->getSentryErrorHandler());
+        $this->assertInstanceOf(Raven_ErrorHandler::class, $this->app->get('raven_error_handler'));
     }
 
     public function testEnvironmentEmptyWhenNotInConfig()
@@ -75,7 +76,7 @@ class SentryServiceProviderTest extends TestCase
 
         $this->provider->boot($this->config);
 
-        $this->assertNull($this->provider->getSentryClient()->environment);
+        $this->assertNull($this->app->get('raven_client')->environment);
     }
 
     public function testEnvironmentSetWhenInConfig()
@@ -86,6 +87,6 @@ class SentryServiceProviderTest extends TestCase
 
         $this->provider->boot($this->config);
 
-        $this->assertEquals($this->provider->getSentryClient()->environment, 'production');
+        $this->assertEquals($this->app->get('raven_client')->environment, 'production');
     }
 }
