@@ -15,7 +15,7 @@ script:
 - vendor/bin/phpcs --standard=PSR2 ./src
 - vendor/bin/phpcs --standard=PSR2 ./tests
 after_success:
-- php vendor/bin/coveralls -v
+- php vendor/bin/php-coveralls -v
 notifications:
   email:
     recipients:
