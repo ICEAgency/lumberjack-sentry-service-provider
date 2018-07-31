@@ -13,7 +13,7 @@ class SentryServiceProvider extends ServiceProvider
     {
         $config = $this->app->get(Config::class);
 
-        if (!$config->get('sentry.dsn') || $config->get('sentry.enabled') == 'false') {
+        if (!$config->get('sentry.dsn') || $config->get('sentry.enabled') == "false") {
             return;
         }
 
