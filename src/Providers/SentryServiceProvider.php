@@ -27,11 +27,13 @@ class SentryServiceProvider extends ServiceProvider
         $this->sentry_error_handler->registerShutdownFunction();
     }
 
-    public function getSentryClient() : Raven_Client {
+    public function getSentryClient() : Raven_Client
+    {
         return $this->sentry_client;
     }
 
-    public function getSentryErrorHandler() : Raven_ErrorHandler {
+    public function getSentryErrorHandler() : Raven_ErrorHandler
+    {
         return $this->sentry_error_handler;
     }
 }

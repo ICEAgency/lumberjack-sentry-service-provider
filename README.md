@@ -1,5 +1,11 @@
 # Sentry Service Provider for Lumberjack
 
+[![Latest Stable Version](https://poser.pugx.org/iceagency/lumberjack-sentry-service-provider/v/stable)](https://packagist.org/packages/iceagency/lumberjack-sentry-service-provider)
+![CI](https://travis-ci.org/ICEAgency/lumberjack-sentry-service-provider.svg?branch=master)
+![Coveralls](https://coveralls.io/repos/github/ICEAgency/lumberjack-sentry-service-provider/badge.svg?branch=master)
+[![Total Downloads](https://poser.pugx.org/iceagency/lumberjack-sentry-service-provider/downloads)](https://packagist.org/packages/iceagency/lumberjack-sentry-service-provider)
+[![License](https://poser.pugx.org/iceagency/lumberjack-sentry-service-provider/license)](https://packagist.org/packages/iceagency/lumberjack-sentry-service-provider)
+
 A Service Provider for the [Lumberjack](https://github.com/Rareloop/lumberjack) framework that allows simple integration to [Sentry](https://sentry.io/).
 
 Written & maintained by the team at [The ICE Agency](https://www.theiceagency.co.uk)

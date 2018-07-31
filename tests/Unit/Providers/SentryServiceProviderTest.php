@@ -17,7 +17,8 @@ class SentryServiceProviderTest extends TestCase
     private $config;
     private $app;
 
-    private function initProvider() {
+    private function initProvider()
+    {
         $this->config = new Config;
         $this->app = new Application;
         $this->app->bind(Config::class, $this->config);
