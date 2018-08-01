@@ -5,7 +5,6 @@ use Rareloop\Lumberjack\Providers\ServiceProvider;
 use Rareloop\Lumberjack\Config;
 use Rareloop\Lumberjack\Application;
 use Raven_Client;
-use Raven_ErrorHandler;
 
 class SentryServiceProvider extends ServiceProvider
 {
@@ -21,15 +20,6 @@ class SentryServiceProvider extends ServiceProvider
             'environment' => $config->get('app.environment')
         ]));
 
-        $this->app->bind(Raven_ErrorHandler::class, new Raven_ErrorHandler($this->app->get(Raven_Client::class)));
-    }
-
-    public function boot()
-    {
-        $raven_error_handler = $this->app->get(Raven_ErrorHandler::class);
-        $raven_error_handler->registerExceptionHandler();
-        $raven_error_handler->registerErrorHandler();
-        $raven_error_handler->registerShutdownFunction();
-        return true;
+        $this->app->get(Raven_Client::class)->install();
     }
 }
