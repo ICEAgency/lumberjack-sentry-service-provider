@@ -32,8 +32,8 @@ Please note, this repo is not ready for production.
 ```
 <?php
 return [
-    'enabled' => getenv('SENTRY_ENABLED')
-    'dsn' => getenv('SENTRY_DSN'),
+    'enabled' => getenv('SENTRY_ENABLED'),
+    'dsn' => getenv('SENTRY_DSN')
 ];
 ```
 3. Add your Sentry DSN to your .env
