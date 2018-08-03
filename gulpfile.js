@@ -15,7 +15,8 @@ gulp.task('phplint', function () {
 
 gulp.task('phpunit', function () {
     var options = {
-        debug: false
+        debug: false,
+        coverageHtml: 'tests/logs/report'
     };
 
     return gulp.src('phpunit.xml')
