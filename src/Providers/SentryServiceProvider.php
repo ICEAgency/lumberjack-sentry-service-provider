@@ -16,10 +16,10 @@ class SentryServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->app->bind(Raven_Client::class, new Raven_Client($config->get('sentry.dsn'), [
+        $this->app->bind('sentry', new Raven_Client($config->get('sentry.dsn'), [
             'environment' => $config->get('app.environment')
         ]));
 
-        $this->app->get(Raven_Client::class)->install();
+        $this->app->get('sentry')->install();
     }
 }

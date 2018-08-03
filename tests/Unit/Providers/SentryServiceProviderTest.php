@@ -4,7 +4,6 @@ namespace IceAgency\Lumberjack\Test\Unit\Providers;
 
 use ReflectionClass;
 use Raven_Client;
-use Raven_ErrorHandler;
 use PHPUnit\Framework\TestCase;
 use Rareloop\Lumberjack\Application;
 use Rareloop\Lumberjack\Config;
@@ -25,57 +24,54 @@ class SentryServiceProviderTest extends TestCase
         $this->provider = new SentryServiceProvider($this->app);
     }
 
-    public function testNoRegisterWhenNoDsnInConfig()
-    {
-        $this->initProvider();
-        $this->assertNull($this->provider->register());
-    }
-
-    public function testNoRegisterWhenSentryDisabledInConfigWithNoDsn()
-    {
-        $this->initProvider();
-        $this->config->set('sentry.enabled', "false");
-
-        $this->assertNull($this->provider->register());
-    }
-
-    public function testNoRegisterWhenSentryDisabledInConfigWithDsn()
+    public function testIsBound()
     {
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
-        $this->config->set('sentry.enabled', "false");
-
-        $this->assertNull($this->provider->register());
-    }
-
-    public function testSentryClientIsCreated()
-    {
-        $this->initProvider();
-        $this->config->set('sentry.dsn', $this->exampleDsn);
-
         $this->provider->register();
-
-        $this->assertInstanceOf(Raven_Client::class, $this->app->get(Raven_Client::class));
+        $this->assertTrue($this->app->has('sentry'));
+        $this->assertInstanceOf(Raven_Client::class, $this->app->get('sentry'));
     }
 
-    public function testEnvironmentSetWhenInConfig()
+    public function testNoDsn()
+    {
+        $this->initProvider();
+        $this->provider->register();
+        $this->assertFalse($this->app->has('sentry'));
+    }
+
+    public function testDisabled()
+    {
+        $this->initProvider();
+        $this->config->set('sentry.enabled', "false");
+        $this->provider->register();
+        $this->assertFalse($this->app->has('sentry'));
+    }
+
+    public function testEnvironment()
     {
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
         $this->config->set('app.environment', 'production');
-
         $this->provider->register();
-
-        $this->assertEquals($this->app->get(Raven_Client::class)->environment, 'production');
+        $this->assertEquals($this->app->get('sentry')->environment, 'production');
     }
 
-    public function testEnvironmentEmptyWhenNotInConfig()
+    public function testNoEnvironment()
     {
         $this->initProvider();
         $this->config->set('sentry.dsn', $this->exampleDsn);
-
         $this->provider->register();
+        $this->assertNull($this->app->get('sentry')->environment);
+    }
 
-        $this->assertNull($this->app->get(Raven_Client::class)->environment);
+    public function testDsn()
+    {
+        $this->initProvider();
+        $this->config->set('sentry.dsn', $this->exampleDsn);
+        $this->provider->register();
+        $this->assertEquals($this->app->get('sentry')->server, 'https://sentry.io/api/<project>/store/');
+        $this->assertEquals($this->app->get('sentry')->public_key, '<key>');
+        $this->assertEquals($this->app->get('sentry')->project, '<project>');
     }
 }
