@@ -2,7 +2,6 @@
 
 namespace IceAgency\Lumberjack\Test\Unit\Providers;
 
-use ReflectionClass;
 use Raven_Client;
 use PHPUnit\Framework\TestCase;
 use Rareloop\Lumberjack\Application;
