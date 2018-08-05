@@ -10,8 +10,6 @@ A Service Provider for the [Lumberjack](https://github.com/Rareloop/lumberjack) 
 
 Written & maintained by the team at [The ICE Agency](https://www.theiceagency.co.uk)
 
-Please note, this repo is not ready for production.
-
 ## Requirements
 
 * PHP >=7.0
